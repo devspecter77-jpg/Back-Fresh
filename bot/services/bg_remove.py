@@ -21,10 +21,18 @@ if _app_data_dir:
 logger.info("rembg modeli yuklanmoqda: %s (birinchi ishga tushirishda yuklab olinishi mumkin)", REMBG_MODEL)
 _session = new_session(REMBG_MODEL)
 
+# Telefon kamera rasmlari (masalan 3000x4000px) alpha-matting bilan juda ko'p xotira
+# talab qiladi va kichik serverlarda (masalan Railway'ning kichik tarifida) jarayonni
+# o'ldirib qo'yishi mumkin. Shuning uchun ishlovdan oldin oqilona o'lchamga kichraytiramiz —
+# ko'zga sifat farqi deyarli sezilmaydi, lekin xotira sarfi bir necha barobar kamayadi.
+MAX_DIMENSION = int(os.getenv("REMBG_MAX_DIMENSION", "1600"))
+
 
 def remove_background(image_bytes: bytes) -> Image.Image:
     """CPU-bog'liq operatsiya — chaqiruvchi tomon asyncio.to_thread orqali chaqirishi kerak."""
     input_image = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    if max(input_image.size) > MAX_DIMENSION:
+        input_image.thumbnail((MAX_DIMENSION, MAX_DIMENSION), Image.LANCZOS)
     return remove(
         input_image,
         session=_session,
