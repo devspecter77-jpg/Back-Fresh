@@ -58,6 +58,19 @@ Faqat `ADMIN_ID`dagi foydalanuvchi ishlata oladi:
 - `/userinfo <chat_id>` — telefon raqami, qolgan urinishlar, blok holati.
 - `/stats` — umumiy foydalanuvchilar soni va bloklanganlar soni.
 
+## Railway'ga deploy qilish
+
+Loyihada `railway.json` fayli bor — Railway'ning avtomatik aniqlagichi (Railpack) ildizda `main.py` topa olmay xato berishining oldini olish uchun ishga tushirish buyrug'i (`python -m bot.main`) shu faylda aniq ko'rsatilgan, qo'shimcha sozlash shart emas.
+
+Railway loyihasida **Variables** bo'limiga `.env`dagi barcha qiymatlarni qo'shing: `BOT_TOKEN`, `ADMIN_ID`, `ADMIN_CONTACT`, `PAYMENT_CARD` (majburiy), va xohlasangiz `FREE_ATTEMPTS`, `PRICE_SOM`, `PRICE_ATTEMPTS`, `REMBG_MODEL`.
+
+**Muhim — doimiy saqlash (Volume):** Railway konteyneri qayta ishga tushganda (deploy, restart) standart fayl tizimi o'chib ketadi — bu holda foydalanuvchilar bazasi, saqlangan fon rasmlari va yuklab olingan AI-model (~170MB) har safar yo'qolib, qaytadan yuklanadi. Buning oldini olish uchun:
+
+1. Railway loyihangizda **Volume** qo'shing va uni masalan `/data` yo'liga ulang.
+2. Variables'ga `APP_DATA_DIR=/data` qo'shing.
+
+Shundan so'ng baza (`data/bot.db`), saqlangan fonlar (`storage/`) va rembg modeli shu Volume ichida saqlanadi va qayta ishga tushirishlarda yo'qolmaydi.
+
 ## Loyihaning tuzilishi
 
 ```

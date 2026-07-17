@@ -15,10 +15,13 @@ PRICE_ATTEMPTS = os.getenv("PRICE_ATTEMPTS", "60")
 REMBG_MODEL = os.getenv("REMBG_MODEL", "u2net")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-STORAGE_DIR = BASE_DIR / "storage"
+# Railway kabi platformalarda konteyner qayta ishga tushganda fayllar o'chib ketadi —
+# doimiy Volume ulangan bo'lsa, APP_DATA_DIR shu Volume yo'liga (masalan /data) ko'rsatilishi kerak.
+DATA_ROOT = Path(os.getenv("APP_DATA_DIR", BASE_DIR))
+STORAGE_DIR = DATA_ROOT / "storage"
 BG_DIR = STORAGE_DIR / "backgrounds"
 TMP_DIR = STORAGE_DIR / "tmp"
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = DATA_ROOT / "data"
 DB_PATH = str(DATA_DIR / "bot.db")
 
 for _dir in (BG_DIR, TMP_DIR, DATA_DIR):
